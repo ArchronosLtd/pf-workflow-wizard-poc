@@ -1,10 +1,12 @@
 import React, { useState, useRef, useCallback } from "react";
 import ReactFlow, {
+  Node,
   ReactFlowProvider,
   addEdge,
   useNodesState,
   useEdgesState,
-  Controls
+  Controls,
+  Connection
 } from "react-flow-renderer";
 
 import getId from './utils/IdGenerator';
@@ -19,28 +21,34 @@ const initialNodes = [
     id: "1",
     type: "input",
     data: { label: "input node" },
-    position: { x: 250, y: 5 }
+    position: { x: 0, y: 0 }
   }
 ];
 
 const WorkflowBuilder = () => {
+  // TODO: find out typing for these items
   const reactFlowWrapper = useRef<any>(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
 
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+
   const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge(params, eds)),
+    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
 
-  const onDragOver = useCallback((event: any) => {
+  const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
 
+  const updateNodes = (newNode: Node) => {
+    setNodes((nds) => nds.concat(newNode));
+  };
+
   const onDrop = useCallback(
-    (event: any) => {
+    (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
 
       if (!reactFlowInstance && !reactFlowWrapper) {
@@ -67,7 +75,7 @@ const WorkflowBuilder = () => {
         data: { label: `${type} node` }
       };
 
-      setNodes((nds) => nds.concat(newNode));
+      updateNodes(newNode);
     },
     [reactFlowInstance, setNodes, reactFlowWrapper]
   );
@@ -77,19 +85,17 @@ const WorkflowBuilder = () => {
 
     const bottomMost = sortedNodes[0];
 
-    setNodes((nds) =>
-      nds.concat({
-        id: getId(),
-        type,
-        position: {
-          x: bottomMost.position.x,
-          y: bottomMost.position.y + 50
-        },
-        data: {
-          label: "tester"
-        }
-      })
-    );
+    updateNodes({
+      id: getId(),
+      type,
+      position: {
+        x: bottomMost.position.x,
+        y: bottomMost.position.y + (bottomMost?.height ?? 50) + 20
+      },
+      data: {
+        label: `${type} [TODO: a way of adding a state title]`
+      }
+    });
   };
 
   return (
@@ -102,6 +108,7 @@ const WorkflowBuilder = () => {
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
+            onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
             fitView
