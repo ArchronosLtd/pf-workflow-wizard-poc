@@ -1,0 +1,17 @@
+aside {
+  border-right: 1px solid #eee;
+  padding: 15px 10px;
+  font-size: 12px;
+  background: #fcfcfc;
+
+  .description {
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  aside {
+    width: 20%;
+    max-width: 250px;
+  }
+}
