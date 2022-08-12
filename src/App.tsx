@@ -13,12 +13,14 @@ import getId from './utils/IdGenerator';
 import nodeSort from './utils/NodeSort';
 
 import Sidebar from "./components/Sidebar";
+import NodeEditor from './components/NodeEditor';
+import NodeSummary from "./components/NodeSummary";
 
 import './App.scss';
 
 const initialNodes = [
   {
-    id: "1",
+    id: getId(),
     type: "input",
     data: { label: "input node" },
     position: { x: 0, y: 0 }
@@ -29,6 +31,7 @@ const WorkflowBuilder = () => {
   // TODO: find out typing for these items
   const reactFlowWrapper = useRef<any>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const [selectedNode, setSelectedNode] = useState<Node | undefined>();
 
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -93,7 +96,7 @@ const WorkflowBuilder = () => {
         y: bottomMost.position.y + (bottomMost?.height ?? 50) + 20
       },
       data: {
-        label: `${type} [TODO: a way of adding a state title]`
+        label: `Default title`
       }
     });
   };
@@ -112,13 +115,23 @@ const WorkflowBuilder = () => {
             onDrop={onDrop}
             onDragOver={onDragOver}
             fitView
+            onSelectionChange={({ nodes }) => {
+              const node = nodes[0]
+              setSelectedNode(node);
+            }}
           >
             <Controls />
           </ReactFlow>
         </div>
-        <Sidebar addNode={addNode} />
+        <aside>
+          <Sidebar addNode={addNode} />
+          <hr />
+          <NodeSummary />
+          <hr />
+          {selectedNode && <NodeEditor node={selectedNode} />}
+        </aside>
       </ReactFlowProvider>
-    </div>
+    </div >
   );
 };
 

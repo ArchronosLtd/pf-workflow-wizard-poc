@@ -37,3 +37,23 @@
     flex-direction: row;
   }
 }
+
+.react-flow__attribution {
+  display: none;
+}
+
+.react-flow__node {
+  border-width: 5px;
+
+  &.react-flow__node-input {
+    border-color: #64b430;
+  }
+
+  &.react-flow__node-default {
+    border-color: #ffa42a;
+  }
+
+  &.react-flow__node-output {
+    border-color: #ff3333;
+  }
+}

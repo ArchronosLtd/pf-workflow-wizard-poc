@@ -1,0 +1,12 @@
+.node-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  font-size: 12px;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+  }
+}

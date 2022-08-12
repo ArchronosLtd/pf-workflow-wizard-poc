@@ -1,0 +1,31 @@
+.node-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  > div {
+    display: flex;
+    line-height: 25px;
+    gap: 5px;
+
+    > span {
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+      background: red;
+      border-radius: 3px;
+
+      &.input {
+        background-color: #64b430;
+      }
+
+      &.default {
+        background-color: #ffa42a;
+      }
+
+      &.output {
+        background-color: #ff3333;
+      }
+    }
+  }
+}

@@ -16,7 +16,7 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
   };
 
   return (
-    <aside>
+    <div>
       <div className="description">
         You can drag these nodes to the pane on the right.
       </div>
@@ -50,13 +50,7 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
       >
         Output Node
       </div>
-
-      <hr />
-
-      <div>
-        You currently have {nodes.length} states.
-      </div>
-    </aside>
+    </div>
   );
 };
 export default Sidebar;
